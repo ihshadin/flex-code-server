@@ -6,7 +6,7 @@ const Todo = new mongoose.model("Todo", todoSchema);
 
 // get all todos
 router.get('/', async (req, res) => {
-    console.log('This is home page for server');
+    console.log('This is home page for server site');
 })
 
 
