@@ -4,7 +4,12 @@ const cors = require('cors');
 require('dotenv').config();
 const app = express()
 const port = process.env.PORT || 5000;
+
+// Routes function
 const flexHandler = require('./routeHandler/flexHandler')
+const blogHandler = require('./routeHandler/blogHandler')
+const userHandler = require('./routeHandler/userHandler')
+const feedbackHandler = require('./routeHandler/feedbackHandler')
 
 // Middleware
 app.use(cors());
@@ -27,6 +32,9 @@ const databaseConnect = async () => {
 
 // application routes
 app.use('/problems', flexHandler);
+app.use('/blog', blogHandler);
+app.use('/users', userHandler);
+app.use('/feedback', feedbackHandler);
 
 app.get('/', (req, res) => {
     res.send('FlexCode. Unlock your code knowledge');
