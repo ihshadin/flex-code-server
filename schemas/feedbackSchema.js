@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 
-const flexSchema = mongoose.Schema({
+const feedbackSchema = mongoose.Schema({
     title: {
         type: String,
     }
 })
 
-module.exports = flexSchema;
+module.exports = feedbackSchema;

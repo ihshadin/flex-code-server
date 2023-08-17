@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 
-const flexSchema = mongoose.Schema({
+const userSchema = mongoose.Schema({
     title: {
         type: String,
     }
 })
 
-module.exports = flexSchema;
+module.exports = userSchema;

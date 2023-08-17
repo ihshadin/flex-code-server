@@ -4,7 +4,12 @@ const cors = require('cors');
 require('dotenv').config();
 const app = express()
 const port = process.env.PORT || 5000;
+
+// Routes function
 const flexHandler = require('./routeHandler/flexHandler')
+const blogHandler = require('./routeHandler/blogHandler')
+const userHandler = require('./routeHandler/userHandler')
+const feedbackHandler = require('./routeHandler/feedbackHandler')
 
 // Middleware
 app.use(cors());
@@ -14,12 +19,10 @@ const dburi = `mongodb+srv://${process.env.FLEXCODE_USERNAME}:${process.env.FLEX
 
 const databaseConnect = async () => {
     try {
-       setTimeout(function(){
-        mongoose.connect(dburi, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        })
-       }, 6000)
+       await  mongoose.connect(dburi, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    })
         console.log('Database connection successful');
     } catch (error) {
         console.log(error.message);
@@ -28,7 +31,10 @@ const databaseConnect = async () => {
 }
 
 // application routes
-app.use('/testimonial', flexHandler);
+app.use('/problems', flexHandler);
+app.use('/blog', blogHandler);
+app.use('/users', userHandler);
+app.use('/feedback', feedbackHandler);
 
 app.get('/', (req, res) => {
     res.send('FlexCode. Unlock your code knowledge');
