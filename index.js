@@ -19,14 +19,14 @@ const dburi = `mongodb+srv://${process.env.FLEXCODE_USERNAME}:${process.env.FLEX
 
 const databaseConnect = async () => {
     try {
-        await mongoose.connect(dburi, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        })
+       await  mongoose.connect(dburi, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    })
         console.log('Database connection successful');
     } catch (error) {
         console.log(error.message);
-        console.log('Database connection faild');
+        console.log('Database connection failed');
     }
 }
 

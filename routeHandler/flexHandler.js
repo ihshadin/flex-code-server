@@ -1,12 +1,12 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const router = express.Router();
-const todoSchema = require('../schemas/flexSchema');
-const Todo = new mongoose.model("Todo", todoSchema);
+const feedbackSchema = require('../schemas/flexSchema');
+const { mongoose } = require('mongoose');
 
-// get all todos
+const Feedback = new mongoose.model("Testimonial", feedbackSchema)
+// get all todo
 router.get('/', async (req, res) => {
-    console.log('This is home page for server site');
+
 })
 
 
