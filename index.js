@@ -14,19 +14,21 @@ const dburi = `mongodb+srv://${process.env.FLEXCODE_USERNAME}:${process.env.FLEX
 
 const databaseConnect = async () => {
     try {
-        await mongoose.connect(dburi, {
+       setTimeout(function(){
+        mongoose.connect(dburi, {
             useNewUrlParser: true,
             useUnifiedTopology: true,
         })
+       }, 6000)
         console.log('Database connection successful');
     } catch (error) {
         console.log(error.message);
-        console.log('Database connection faild');
+        console.log('Database connection failed');
     }
 }
 
 // application routes
-app.use('/problems', flexHandler);
+app.use('/testimonial', flexHandler);
 
 app.get('/', (req, res) => {
     res.send('FlexCode. Unlock your code knowledge');

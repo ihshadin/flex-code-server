@@ -1,9 +1,7 @@
 const mongoose = require('mongoose');
 
-const todoSchema = mongoose.Schema({
-    title: {
-        type: String,
-    }
+const feedbackSchema = mongoose.Schema({
+    name: String
 })
 
-module.exports = todoSchema;
+module.exports = feedbackSchema;
