@@ -6,7 +6,7 @@ const Blog = new mongoose.model("Blog", blogSchema);
 
 // get all todos
 router.get('/', async (req, res) => {
-    console.log('This is home page for server site');
+    console.log('This is home page for server site sayeed');
 })
 
 
