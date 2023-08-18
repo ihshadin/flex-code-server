@@ -22,6 +22,7 @@ const databaseConnect = async () => {
        await  mongoose.connect(dburi, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
+        // serverSelectionTimeoutMS: 30000,
     })
         console.log('Database connection successful');
     } catch (error) {
