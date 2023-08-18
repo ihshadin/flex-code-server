@@ -4,8 +4,8 @@ const blogSchema = mongoose.Schema({
     
         title: String,
         Subtitle: String,
-        image: String,
         userImage: String,
+        imageUrl: String,
         userName: String,
         userRole: String,
         details: String,
