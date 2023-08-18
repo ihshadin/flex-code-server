@@ -4,7 +4,12 @@ const cors = require('cors');
 require('dotenv').config();
 const app = express()
 const port = process.env.PORT || 5000;
+
+// Routes function
 const flexHandler = require('./routeHandler/flexHandler')
+const blogHandler = require('./routeHandler/blogHandler')
+const userHandler = require('./routeHandler/userHandler')
+const feedbackHandler = require('./routeHandler/feedbackHandler')
 
 // Middleware
 app.use(cors());
@@ -17,16 +22,20 @@ const databaseConnect = async () => {
         await mongoose.connect(dburi, {
             useNewUrlParser: true,
             useUnifiedTopology: true,
+            // serverSelectionTimeoutMS: 30000,
         })
         console.log('Database connection successful');
     } catch (error) {
         console.log(error.message);
-        console.log('Database connection faild');
+        console.log('Database connection failed');
     }
 }
 
 // application routes
 app.use('/problems', flexHandler);
+app.use('/blog', blogHandler);
+app.use('/users', userHandler);
+app.use('/feedback', feedbackHandler);
 
 app.get('/', (req, res) => {
     res.send('FlexCode. Unlock your code knowledge');
@@ -35,4 +44,3 @@ app.get('/', (req, res) => {
 app.listen(port, (req, res) => {
     console.log('FlexCode are runnin on: ', port);
 })
-
