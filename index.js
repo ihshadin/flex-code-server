@@ -19,11 +19,11 @@ const dburi = `mongodb+srv://${process.env.FLEXCODE_USERNAME}:${process.env.FLEX
 
 const databaseConnect = async () => {
     try {
-       await  mongoose.connect(dburi, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-        // serverSelectionTimeoutMS: 30000,
-    })
+        await mongoose.connect(dburi, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+            // serverSelectionTimeoutMS: 30000,
+        })
         console.log('Database connection successful');
     } catch (error) {
         console.log(error.message);
@@ -44,4 +44,3 @@ app.get('/', (req, res) => {
 app.listen(port, (req, res) => {
     console.log('FlexCode are runnin on: ', port);
 })
-
