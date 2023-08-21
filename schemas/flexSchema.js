@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 
-const todoSchema = mongoose.Schema({
+const flexSchema = mongoose.Schema({
     title: {
         type: String,
     }
 })
 
-module.exports = todoSchema;
+module.exports = flexSchema;
