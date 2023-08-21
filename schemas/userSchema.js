@@ -1,9 +1,12 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const userSchema = mongoose.Schema({
-    title: {
-        type: String,
-    }
-})
+  name: {
+    type: String,
+  },
+  email: {
+    type: String,
+  },
+});
 
 module.exports = userSchema;
