@@ -2,10 +2,11 @@ const express = require('express');
 const mongoose = require('mongoose');
 const router = express.Router();
 const feedbackSchema = require('../schemas/feedbackSchema');
+const checkLogin = require('../middlewares/checkLogin');
 const Feedback = new mongoose.model("Feedback", feedbackSchema);
 
 // get all todos
-router.get('/', async (req, res) => {
+router.get('/', checkLogin, async (req, res) => {
         await Feedback.find().then((data) => {
            console.log(data);
                 res.json({
@@ -23,7 +24,7 @@ router.get('/', async (req, res) => {
     
 })
 
-router.post('/', async (req, res) => {
+router.post('/', checkLogin, async (req, res) => {
     const newFeedback = new Feedback(req.body);
     await newFeedback.save().then((data) => {
 

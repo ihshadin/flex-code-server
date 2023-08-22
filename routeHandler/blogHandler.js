@@ -2,10 +2,11 @@ const express = require("express");
 const mongoose = require("mongoose");
 const router = express.Router();
 const blogSchema = require("../schemas/blogSchema");
+const checkLogin = require("../middlewares/checkLogin");
 const Blog = new mongoose.model("Blog", blogSchema);
 
 // get all Blogs
-router.get("/", async (req, res) => {
+router.get("/", checkLogin, async (req, res) => {
   await Blog.find()
     .then((data) => {
       res.json({
@@ -23,7 +24,7 @@ router.get("/", async (req, res) => {
 
 // Get Single blog details
 
-router.get("/:id", async (req, res) => {
+router.get("/:id", checkLogin, async (req, res) => {
   const blogId = req.params.id;
   try {
     const blog = await Blog.findById(blogId);
@@ -45,7 +46,7 @@ router.get("/:id", async (req, res) => {
 });
 
 // Create a new Blog
-router.post("/", async (req, res) => {
+router.post("/", checkLogin, async (req, res) => {
   const newBlog = new Blog(req.body);
   try {
     await newBlog.save();
