@@ -1,8 +1,14 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const router = express.Router();
-const userSchema = require("../schemas/userSchema");
+const userSchema = require('../schemas/userSchema');
 const Student = new mongoose.model("Student", userSchema);
+const checkLogin = require('../middlewares/checkLogin');
+
+// get all todos
+router.get('/', checkLogin, async (req, res) => {
+    console.log('This is home page for server site');
+})
 
 // get all users
 
