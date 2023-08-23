@@ -6,7 +6,7 @@ const checkLogin = require('../middlewares/checkLogin');
 const Feedback = new mongoose.model("Feedback", feedbackSchema);
 
 // get all todos
-router.get('/', checkLogin, async (req, res) => {
+router.get('/', async (req, res) => {
         await Feedback.find().then((data) => {
            console.log(data);
                 res.json({
@@ -24,7 +24,7 @@ router.get('/', checkLogin, async (req, res) => {
     
 })
 
-router.post('/', checkLogin, async (req, res) => {
+router.post('/', async (req, res) => {
     const newFeedback = new Feedback(req.body);
     await newFeedback.save().then((data) => {
 

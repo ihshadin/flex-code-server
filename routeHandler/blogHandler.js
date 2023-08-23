@@ -46,7 +46,7 @@ router.get("/:id", checkLogin, async (req, res) => {
 });
 
 // Create a new Blog
-router.post("/", checkLogin, async (req, res) => {
+router.post("/", async (req, res) => {
   const newBlog = new Blog(req.body);
   try {
     await newBlog.save();
