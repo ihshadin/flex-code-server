@@ -2,16 +2,15 @@ const express = require("express");
 const mongoose = require("mongoose");
 const router = express.Router();
 const blogSchema = require("../schemas/blogSchema");
-// const checkLogin = require("../middlewares/checkLogin");
 const Blog = new mongoose.model("Blog", blogSchema);
 
-// get all Blogs
+
 router.get("/all", async (req, res) => {
   await Blog.find()
     .then((data) => {
       res.json({
         result: data,
-      
+
       });
     })
     .catch((err) => {
@@ -23,7 +22,6 @@ router.get("/all", async (req, res) => {
 });
 
 // Get Single blog details
-
 router.get("/:id", async (req, res) => {
   const blogId = req.params.id;
   try {
