@@ -23,9 +23,7 @@ const databaseConnect = async () => {
 
         app.post('/jwt', (req, res) => {
             const user = req.body;
-            console.log(user);
             const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' });
-            console.log(token);
             res.send({ token });
         })
 
