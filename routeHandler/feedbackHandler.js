@@ -6,7 +6,7 @@ const verifyLogin = require('../middlewares/verifyLogin');
 const Feedback = new mongoose.model("Feedback", feedbackSchema);
 
 
-router.get('/', verifyLogin, async (req, res) => {
+router.get('/', async (req, res) => {
     await Feedback.find().then((data) => {
         res.json({
             result: data,
