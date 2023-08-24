@@ -4,13 +4,13 @@ const router = express.Router();
 const blogSchema = require("../schemas/blogSchema");
 const Blog = new mongoose.model("Blog", blogSchema);
 
-// get all Blogs
-router.get("/", async (req, res) => {
+
+router.get("/all", async (req, res) => {
   await Blog.find()
     .then((data) => {
       res.json({
         result: data,
-        message: "success",
+
       });
     })
     .catch((err) => {
@@ -22,7 +22,6 @@ router.get("/", async (req, res) => {
 });
 
 // Get Single blog details
-
 router.get("/:id", async (req, res) => {
   const blogId = req.params.id;
   try {
@@ -43,6 +42,25 @@ router.get("/:id", async (req, res) => {
     });
   }
 });
+
+
+// pagination 
+
+router.get('/', async (req, res) => {
+  const page = parseInt(req.query.page) || 0;
+  const limit = parseInt(req.query.limit) || 10;
+  try {
+    const result = await Blog.find()
+      .skip(page * limit)
+      .limit(limit);
+    console.log(page, limit);
+    res.send(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
 
 // Create a new Blog
 router.post("/", async (req, res) => {
