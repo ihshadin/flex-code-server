@@ -185,6 +185,7 @@ router.post("/", async (req, res) => {
       transactionId: newTransactionId,
       access: "life time",
       paidStatus: "Unpaid",
+      time: new Date(),
     };
 
     const newFinalInstance = new Payment(finalOrder);
@@ -240,6 +241,15 @@ router.post("/", async (req, res) => {
 
     // res.redirect(`http://localhost:5173/payment/success/${newTransactionId}`);
   });
+});
+
+router.get("/:tranId", async (req, res) => {
+  console.log("from success and login", req.params.tranId);
+
+  const paidUser = await Payment.findOne({
+    transactionId: req.params.tranId,
+  });
+  res.send(paidUser);
 });
 
 module.exports = router;
