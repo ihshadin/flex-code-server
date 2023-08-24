@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const router = express.Router();
 const blogSchema = require("../schemas/blogSchema");
+const verifyLogin = require("../middlewares/verifyLogin");
 const Blog = new mongoose.model("Blog", blogSchema);
 
 
@@ -36,7 +37,6 @@ router.get("/:id", async (req, res) => {
       message: "success",
     });
   } catch (err) {
-    console.log(err);
     res.status(500).json({
       message: "error",
     });
@@ -53,10 +53,8 @@ router.get('/', async (req, res) => {
     const result = await Blog.find()
       .skip(page * limit)
       .limit(limit);
-    console.log(page, limit);
     res.send(result);
   } catch (error) {
-    console.error(error);
     res.status(500).send('Internal Server Error');
   }
 });
