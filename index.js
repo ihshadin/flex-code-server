@@ -41,6 +41,7 @@ const flexHandler = require("./routeHandler/flexHandler");
 const blogHandler = require("./routeHandler/blogHandler");
 const userHandler = require("./routeHandler/userHandler");
 const feedbackHandler = require("./routeHandler/feedbackHandler");
+const nodeBookHandler = require("./routeHandler/nodeBookHandler");
 const paymentHandler = require("./routeHandler/paymentHandler");
 const problemHandler = require("./routeHandler/problemHandler");
 
@@ -54,6 +55,7 @@ app.use("/problems", flexHandler);
 app.use("/blog", blogHandler);
 app.use("/student", userHandler);
 app.use("/feedback", feedbackHandler);
+app.use("/nodeBook", nodeBookHandler);
 app.use("/payment", paymentHandler);
 app.use("/problem", problemHandler);
 
