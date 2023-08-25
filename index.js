@@ -42,6 +42,8 @@ const blogHandler = require("./routeHandler/blogHandler");
 const userHandler = require("./routeHandler/userHandler");
 const feedbackHandler = require("./routeHandler/feedbackHandler");
 const paymentHandler = require("./routeHandler/paymentHandler");
+const problemHandler = require("./routeHandler/problemHandler");
+
 
 // application routes
 app.get("/", (req, res) => {
@@ -53,6 +55,7 @@ app.use("/blog", blogHandler);
 app.use("/student", userHandler);
 app.use("/feedback", feedbackHandler);
 app.use("/payment", paymentHandler);
+app.use("/problem", problemHandler);
 
 app.get("/", (req, res) => {
   res.send("FlexCode. Unlock your code knowledge");
