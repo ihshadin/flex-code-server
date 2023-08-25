@@ -1,16 +1,10 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const app = express();
 const port = process.env.PORT || 5000;
-
-// Routes function
-const flexHandler = require("./routeHandler/flexHandler");
-const blogHandler = require("./routeHandler/blogHandler");
-const userHandler = require("./routeHandler/userHandler");
-const feedbackHandler = require("./routeHandler/feedbackHandler");
-const problemHandler = require("./routeHandler/problemHandler");
 
 // Middleware
 app.use(cors());
@@ -25,21 +19,43 @@ const databaseConnect = async () => {
       useUnifiedTopology: true,
       // serverSelectionTimeoutMS: 30000,
     });
+
+    app.post("/jwt", (req, res) => {
+      const user = req.body;
+      const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
+        expiresIn: "1h",
+      });
+      res.send({ token });
+    });
+
     console.log("Database connection successful");
   } catch (error) {
     console.log(error.message);
     console.log("Database connection failed");
   }
 };
+databaseConnect();
+
+// Routes function
+const flexHandler = require("./routeHandler/flexHandler");
+const blogHandler = require("./routeHandler/blogHandler");
+const userHandler = require("./routeHandler/userHandler");
+const feedbackHandler = require("./routeHandler/feedbackHandler");
+const paymentHandler = require("./routeHandler/paymentHandler");
+const problemHandler = require("./routeHandler/problemHandler");
+
 
 // application routes
+app.get("/", (req, res) => {
+  res.send("FlexCode. Unlock your code knowledge");
+});
+
 app.use("/problems", flexHandler);
 app.use("/blog", blogHandler);
-app.use("/users", userHandler);
+app.use("/student", userHandler);
 app.use("/feedback", feedbackHandler);
+app.use("/payment", paymentHandler);
 app.use("/problem", problemHandler);
-
-databaseConnect();
 
 app.get("/", (req, res) => {
   res.send("FlexCode. Unlock your code knowledge");
