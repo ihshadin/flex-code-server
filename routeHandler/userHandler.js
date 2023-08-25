@@ -1,17 +1,14 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const router = express.Router();
-const userSchema = require('../schemas/userSchema');
+const userSchema = require("../schemas/userSchema");
 const Student = new mongoose.model("Student", userSchema);
-const checkLogin = require('../middlewares/checkLogin');
 
-// get all todos
-router.get('/', checkLogin, async (req, res) => {
-    console.log('This is home page for server site');
-})
+// router.get('/', async (req, res) => {
+//   console.log('This is home page for server site');
+// })
 
 // get all users
-
 router.get("/", async (req, res) => {
   console.log("This is home page for server site", req.query.email);
   try {
@@ -27,12 +24,7 @@ router.get("/", async (req, res) => {
 router.post("/", async (req, res) => {
   try {
     const newUser = req.body;
-    console.log("24 line theke console log hocche", newUser);
-
     const existingUser = await Student.findOne({ email: newUser?.email });
-
-    console.log("server site", existingUser, newUser?.name);
-
     if (existingUser) {
       return res.status(400).json({ message: "user already exists" });
     } else {

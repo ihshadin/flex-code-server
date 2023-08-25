@@ -2,16 +2,16 @@ const express = require("express");
 const mongoose = require("mongoose");
 const router = express.Router();
 const blogSchema = require("../schemas/blogSchema");
-const checkLogin = require("../middlewares/checkLogin");
+const verifyLogin = require("../middlewares/verifyLogin");
 const Blog = new mongoose.model("Blog", blogSchema);
 
-// get all Blogs
-router.get("/", async (req, res) => {
+
+router.get("/all", async (req, res) => {
   await Blog.find()
     .then((data) => {
       res.json({
         result: data,
-        message: "success",
+
       });
     })
     .catch((err) => {
@@ -23,7 +23,6 @@ router.get("/", async (req, res) => {
 });
 
 // Get Single blog details
-
 router.get("/:id", async (req, res) => {
   const blogId = req.params.id;
   try {
@@ -38,12 +37,28 @@ router.get("/:id", async (req, res) => {
       message: "success",
     });
   } catch (err) {
-    console.log(err);
     res.status(500).json({
       message: "error",
     });
   }
 });
+
+
+// pagination 
+
+router.get('/', async (req, res) => {
+  const page = parseInt(req.query.page) || 0;
+  const limit = parseInt(req.query.limit) || 10;
+  try {
+    const result = await Blog.find()
+      .skip(page * limit)
+      .limit(limit);
+    res.send(result);
+  } catch (error) {
+    res.status(500).send('Internal Server Error');
+  }
+});
+
 
 // Create a new Blog
 router.post("/", async (req, res) => {
