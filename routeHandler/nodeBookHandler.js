@@ -1,13 +1,12 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const router = express.Router();
-const blogSchema = require("../schemas/blogSchema");
-const checkLogin = require("../middlewares/checkLogin");
-const Blog = new mongoose.model("Blog", blogSchema);
+const nodeBookSchema = require('../schemas/nodeBookSchema');
+const NodeBook = new mongoose.model("nodeBook", nodeBookSchema);
 
 // get all Blogs
 router.get("/", async (req, res) => {
-  await Blog.find()
+  await NodeBook.find()
     .then((data) => {
       res.json({
         result: data,
@@ -25,16 +24,16 @@ router.get("/", async (req, res) => {
 // Get Single blog details
 
 router.get("/:id", async (req, res) => {
-  const blogId = req.params.id;
+  const NodeBookId = req.params.id;
   try {
-    const blog = await Blog.findById(blogId);
-    if (!blog) {
+    const nodeBook = await Blog.findById(NodeBookId);
+    if (!nodeBook) {
       return res.status(404).json({
         message: "Blog not found",
       });
     }
     res.json({
-      result: blog,
+      result: nodeBook,
       message: "success",
     });
   } catch (err) {
@@ -47,7 +46,7 @@ router.get("/:id", async (req, res) => {
 
 // Create a new Blog
 router.post("/", async (req, res) => {
-  const newBlog = new Blog(req.body);
+  const newBlog = new NodeBook(req.body);
   try {
     await newBlog.save();
     res.status(200).json({
