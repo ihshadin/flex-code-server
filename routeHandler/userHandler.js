@@ -5,9 +5,9 @@ const userSchema = require('../schemas/userSchema');
 const Student = new mongoose.model("Student", userSchema);
 
 
-router.get('/', async (req, res) => {
-  console.log('This is home page for server site');
-})
+// router.get('/', async (req, res) => {
+//   console.log('This is home page for server site');
+// })
 
 // get all users
 router.get("/", async (req, res) => {
