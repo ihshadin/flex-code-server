@@ -43,6 +43,7 @@ const userHandler = require("./routeHandler/userHandler");
 const feedbackHandler = require("./routeHandler/feedbackHandler");
 const nodeBookHandler = require("./routeHandler/nodeBookHandler");
 const paymentHandler = require("./routeHandler/paymentHandler");
+const solvedProblems = require("./routeHandler/solvedProblems");
 const problemHandler = require("./routeHandler/problemHandler");
 
 
@@ -57,6 +58,7 @@ app.use("/student", userHandler);
 app.use("/feedback", feedbackHandler);
 app.use("/nodeBook", nodeBookHandler);
 app.use("/payment", paymentHandler);
+app.use("/solvedProblems", solvedProblems);
 app.use("/problem", problemHandler);
 
 app.get("/", (req, res) => {
