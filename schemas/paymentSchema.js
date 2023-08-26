@@ -10,6 +10,7 @@ const paymentSchema = new mongoose.Schema({
   access: String,
   transactionId: String,
   paidStatus: String,
+  time: Date,
 });
 
 module.exports = paymentSchema;
