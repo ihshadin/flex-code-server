@@ -4,10 +4,6 @@ const router = express.Router();
 const userSchema = require("../schemas/userSchema");
 const Student = new mongoose.model("Student", userSchema);
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 66d30403e0578fb6b9e4bdeb11ebd53fca9f4bf7
 // router.get('/', async (req, res) => {
 //   console.log('This is home page for server site');
 // })
