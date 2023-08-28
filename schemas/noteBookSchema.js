@@ -1,8 +1,7 @@
 const mongoose = require('mongoose');
 
 const nodeBookSchema = mongoose.Schema({
-    
-        name: String,
+        title: String,
         details: String,
 })
 
