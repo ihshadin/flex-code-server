@@ -6,22 +6,24 @@ const Problem = new mongoose.model("Problem", problemSchema);
 
 // Get all problems 
 router.get("/", async (req, res) => {
-    try {
-    const problemLevel=req.query.level
-    if (!problemLevel) {
-      const data = await Problem.find();
+  try {
+      const searchText = req.query.search;
+      const problemLevel = req.query.level;
+      let query = {};
+      if (problemLevel) {
+          query.level = problemLevel;
+      }
+      if (searchText) {
+          query.title = { $regex: searchText, $options: "i" };
+      }
+      const data = await Problem.find(query);
       res.json(data);
-    } else {
-      const data = await Problem.find({ level: problemLevel });
-      res.json(data);
-    }
-    } catch (err) {
+  } catch (err) {
       res.status(500).json({
-        message: "error",
+          message: "error",
       });
-    }
+  }
 });
-
 
 
 
