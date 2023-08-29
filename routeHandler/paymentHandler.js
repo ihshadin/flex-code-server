@@ -15,7 +15,14 @@ const paymentSchema = require("../schemas/paymentSchema");
 const Payment = mongoose.model("Payment", paymentSchema);
 
 router.get("/", async (req, res) => {
-  console.log("This is home page for server site");
+  try {
+    const users = await Payment.find({ paidStatus: "paid" }, "name paidStatus");
+    return res.status(200).json(users);
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "Error fetching Premum user", error: error.message });
+  }
 });
 
 // router.post("/", async (req, res) => {
@@ -122,46 +129,6 @@ router.post("/", async (req, res) => {
     ship_country: "Bangladesh",
   };
 
-  //   try {
-  //     const sslcz = new SSLCommerzPayment(
-  //       "flexc64e501ed3c650",
-  //       "flexc64e501ed3c650@ssl",
-  //       is_live
-  //     );
-
-  //     const apiResponse = await sslcz.init(data);
-
-  //     // Redirect the user to payment gateway
-  //     let GatewayPageURL = apiResponse.GatewayPageURL;
-  //     res.send({ url: GatewayPageURL });
-
-  //     const finalOrder = {
-  //       name: payment?.name,
-  //       email: payment?.email,
-  //       number: payment?.number,
-  //       address: payment?.address,
-  //       amount: payment?.amount,
-  //       currency: payment?.currency,
-  //       transactionId: newTransactionId,
-  //       access: "life time",
-  //       paidStatus: "Unpaid",
-  //     };
-
-  //     console.log("final order ", finalOrder);
-
-  //     const newFinalInstance = new Payment(finalOrder);
-  //     await newFinalInstance.save();
-
-  //     res.status(200).json({
-  //       message: "finalOrder was inserted successfully",
-  //       order: newFinalInstance,
-  //     });
-  //   } catch (error) {
-  //     console.error("Error during payment initiation:", error);
-  //     res
-  //       .status(500)
-  //       .json({ error: "An error occurred during payment initiation." });
-  //   }
   try {
     const sslcz = new SSLCommerzPayment(
       "flexc64e501ed3c650",
@@ -174,7 +141,6 @@ router.post("/", async (req, res) => {
     // Redirect the user to payment gateway
     let GatewayPageURL = apiResponse.GatewayPageURL;
     // res.send({ url: GatewayPageURL });
-
     const finalOrder = {
       name: payment?.name,
       email: payment?.email,
@@ -190,13 +156,6 @@ router.post("/", async (req, res) => {
 
     const newFinalInstance = new Payment(finalOrder);
     await newFinalInstance.save();
-
-    console.log("final order ", finalOrder);
-
-    // res.status(200).json({
-    //   message: "Payment initiation successful",
-    //   // redirectUrl: GatewayPageURL,
-    // });
 
     res.send({ url: GatewayPageURL });
   } catch (error) {
@@ -238,13 +197,11 @@ router.post("/", async (req, res) => {
       res.redirect(`http://localhost:5173/payment/fail/${newTransactionId}`);
     }
     console.log("fail route ", unPaidUser);
-
-    // res.redirect(`http://localhost:5173/payment/success/${newTransactionId}`);
   });
 });
 
 router.get("/:tranId", async (req, res) => {
-  console.log("from success and login", req.params.tranId);
+  // console.log("from success and login", req.params.tranId);
 
   const paidUser = await Payment.findOne({
     transactionId: req.params.tranId,

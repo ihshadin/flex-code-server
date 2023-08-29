@@ -47,6 +47,26 @@ router.post("/", async (req, res) => {
   }
 });
 
+router.post("/all/:email", async (req, res) => {
+  try {
+    const email = req.params.email;
+    const admin = await Student.updateOne(
+      { email: email },
+      {
+        $set: {
+          userRole: "admin",
+        },
+      }
+    );
+    res.status(200).json({
+      message: "Make admin successfull",
+      user: admin,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Server Error", error: error.message });
+  }
+});
+
 router.patch("/", async (req, res) => {
   try {
     const newUser = req.body;
