@@ -4,9 +4,16 @@ const router = express.Router();
 const userSchema = require("../schemas/userSchema");
 const Student = new mongoose.model("Student", userSchema);
 
-// router.get('/', async (req, res) => {
-//   console.log('This is home page for server site');
-// })
+router.get("/all", async (req, res) => {
+  try {
+    const users = await Student.find();
+    return res.status(200).json(users);
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "Error fetching users", error: error.message });
+  }
+});
 
 // get all users
 router.get("/", async (req, res) => {
@@ -40,42 +47,63 @@ router.post("/", async (req, res) => {
   }
 });
 
-// router.put("/", async (req, res) => {
-//   try {
-//     const newUser = req.body;
-//     // console.log(newUser);
+router.post("/all/:email", async (req, res) => {
+  try {
+    const email = req.params.email;
+    const admin = await Student.updateOne(
+      { email: email },
+      {
+        $set: {
+          userRole: "admin",
+        },
+      }
+    );
+    res.status(200).json({
+      message: "Make admin successfull",
+      user: admin,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Server Error", error: error.message });
+  }
+});
 
-//     const updateUser = await Student.updateOne(
-//       {
-//         email: newUser?.email,
-//       }
-//       // {
-//       //   $set: {
-//       //     username: newUser.username,
-//       //     email: newUser.email,
-//       //   },
-//       // }
-//     );
+router.patch("/", async (req, res) => {
+  try {
+    const newUser = req.body;
+    console.log(newUser);
+    const updatedData = { gender: newUser.value };
 
-//     console.log(updateUser);
+    const updateUser = await Student.updateOne(
+      { email: newUser?.email },
+      updatedData
+    ).then((result) => {
+      console.log(result);
+      if (result.modifiedCount > 0) {
+        console.log("Document updated successfully.");
+      } else {
+        console.log("No document matched the filter.");
+      }
+    });
 
-//     // res.send(updateUser);
+    // console.log(updateUser);
 
-//     // const existingUser = await Student.findOne({ email: newUser?.email });
-//     // if (existingUser) {
-//     //   return res.status(400).json({ message: "user already exists" });
-//     // } else {
-//     //   const newUserInstance = new Student(newUser);
-//     //   await newUserInstance.save();
-//     //   res.status(200).json({
-//     //     message: "user was inserted successfully",
-//     //     user: newUserInstance,
-//     //   });
-//     // }
-//   } catch (error) {
-//     res.status(500).json({ message: "Server Error", error: error.message });
-//   }
-// });
+    // res.send(updateUser);
+
+    // const existingUser = await Student.findOne({ email: newUser?.email });
+    // if (existingUser) {
+    //   return res.status(400).json({ message: "user already exists" });
+    // } else {
+    //   const newUserInstance = new Student(newUser);
+    //   await newUserInstance.save();
+    //   res.status(200).json({
+    //     message: "user was inserted successfully",
+    //     user: newUserInstance,
+    //   });
+    // }
+  } catch (error) {
+    res.status(500).json({ message: "Server Error", error: error.message });
+  }
+});
 
 // router.post("/users", async (req, res) => {
 //   const user = req.body;

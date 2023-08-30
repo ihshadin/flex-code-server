@@ -4,9 +4,30 @@ const router = express.Router();
 const problemSchema = require("../schemas/problemSchema");
 const Problem = new mongoose.model("Problem", problemSchema);
 
+// Get all problems 
+router.get("/", async (req, res) => {
+  try {
+      const searchText = req.query.search;
+      const problemLevel = req.query.level;
+      let query = {};
+      if (problemLevel) {
+          query.level = problemLevel;
+      }
+      if (searchText) {
+          query.title = { $regex: searchText, $options: "i" };
+      }
+      const data = await Problem.find(query);
+      res.json(data);
+  } catch (err) {
+      res.status(500).json({
+          message: "error",
+      });
+  }
+});
+
+
 
 // Create a new Add problem solving code
-
 router.post("/", async (req, res) => {
     const newProblem = new Problem(req.body);
     try {
@@ -15,7 +36,6 @@ router.post("/", async (req, res) => {
         message: "success",
       });
     } catch (err) {
-      console.log(err);
       res.status(500).json({
         message: "error",
       });
