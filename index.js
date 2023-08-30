@@ -45,6 +45,7 @@ const noteBookHandler = require("./routeHandler/noteBookHandler");
 const paymentHandler = require("./routeHandler/paymentHandler");
 const solvedProblems = require("./routeHandler/solvedProblems");
 const problemHandler = require("./routeHandler/problemHandler");
+const exploreHandler = require("./routeHandler/exploreHandler");
 
 
 // application routes
@@ -60,6 +61,7 @@ app.use("/noteBooks", noteBookHandler);
 app.use("/payment", paymentHandler);
 app.use("/solvedProblems", solvedProblems);
 app.use("/problem", problemHandler);
+app.use("/exploredetails", exploreHandler);
 
 app.get("/", (req, res) => {
   res.send("FlexCode. Unlock your code knowledge");
