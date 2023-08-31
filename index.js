@@ -55,7 +55,7 @@ app.get("/", (req, res) => {
 
 app.use("/problems", flexHandler);
 app.use("/blog", blogHandler);
-app.use("/student", userHandler);
+app.use("/users", userHandler);
 app.use("/feedback", feedbackHandler);
 app.use("/noteBooks", noteBookHandler);
 app.use("/payment", paymentHandler);
