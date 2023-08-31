@@ -31,7 +31,7 @@ router.get('/leaderboard', async (req, res) => {
         const leaderboardData = await SolvedProblem.aggregate([
             {
                 $lookup: {
-                    from: 'students', // Name of the users collection
+                    from: 'users', // Name of the users collection
                     localField: 'userEmail',
                     foreignField: 'email',
                     as: 'userData',
@@ -51,8 +51,9 @@ router.get('/leaderboard', async (req, res) => {
             {
                 $group: {
                     _id: '$userEmail',
-                    userName: { $first: '$userData.username' },
-                    // userPhoto: { $first: '$userData.userPhoto' },
+                    displayName: { $first: '$userData.name' },
+                    username: { $first: '$userData.username' },
+                    userPhoto: { $first: '$userData.userPhotoUrl' },
                     userEmail: { $first: '$userEmail' },
                     points: { $sum: '$points' },
                     problemsSolved: { $sum: 1 },
