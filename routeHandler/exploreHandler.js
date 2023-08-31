@@ -3,8 +3,6 @@ const mongoose = require("mongoose");
 const router = express.Router();
 const exploreSchema = require('../schemas/exploreSchema');
 const explore = new mongoose.model("exploreDetails", exploreSchema);
-// const noteBookSchema = require('../schemas/noteBookSchema');
-// const NoteBook = new mongoose.model("noteBook", noteBookSchema);
 
 // get all NoteBook
 router.get("/", async (req, res) => {
