@@ -4,6 +4,7 @@ const solvedProblemsSchema = require('../schemas/solvedProblemSchema');
 const { mongoose } = require('mongoose');
 const SolvedProblem = new mongoose.model("SolvedProblem", solvedProblemsSchema)
 
+// All solved Problems get
 router.get('/', async (req, res) => {
     try {
         const solvedProblems = await SolvedProblem.find();
@@ -13,6 +14,7 @@ router.get('/', async (req, res) => {
     }
 })
 
+// specific user get his solved problem
 router.get('/userSolveProblem', async (req, res) => {
     try {
         const userEmail = req.query.email
@@ -53,7 +55,7 @@ router.get('/leaderboard', async (req, res) => {
                     // userPhoto: { $first: '$userData.userPhoto' },
                     userEmail: { $first: '$userEmail' },
                     points: { $sum: '$points' },
-                    problemsSolved: { $sum: 1 }, // Count of solved problems
+                    problemsSolved: { $sum: 1 },
                 },
             },
             {

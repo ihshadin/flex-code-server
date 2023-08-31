@@ -7,6 +7,57 @@ const Problem = new mongoose.model("Problem", problemSchema);
 // Get all problems 
 router.get("/", async (req, res) => {
   try {
+<<<<<<< HEAD
+    const searchText = req.query.search;
+    const problemLevel = req.query.level;
+    let query = {};
+    if (problemLevel) {
+      query.level = problemLevel;
+    }
+    if (searchText) {
+      query.title = { $regex: searchText, $options: "i" };
+    }
+    const data = await Problem.find(query);
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({
+      message: "error",
+    });
+  }
+});
+
+// Get Single problem details
+router.get("/:id", async (req, res) => {
+  const problemId = req.params.id;
+  try {
+    const problem = await Problem.findById(problemId);
+    if (!problem) {
+      return res.status(404).json({
+        message: "Problem not found",
+      });
+    }
+    res.json(problem);
+  } catch (err) {
+    res.status(500).json({
+      message: "error",
+    });
+  }
+});
+
+
+// Create a new Add problem solving code
+router.post("/", async (req, res) => {
+  const newProblem = new Problem(req.body);
+  try {
+    await newProblem.save();
+    res.status(200).json({
+      message: "success",
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: "error",
+    });
+=======
       const searchText = req.query.search;
       const problemLevel = req.query.level;
       let query = {};
@@ -22,11 +73,14 @@ router.get("/", async (req, res) => {
       res.status(500).json({
           message: "error",
       });
+>>>>>>> 06e98ba2891b8c138cfe855fac32f548367723c5
   }
 });
 
 
 
+<<<<<<< HEAD
+=======
 // Create a new Add problem solving code
 router.post("/", async (req, res) => {
     const newProblem = new Problem(req.body);
@@ -44,5 +98,6 @@ router.post("/", async (req, res) => {
 
 
 
+>>>>>>> 06e98ba2891b8c138cfe855fac32f548367723c5
 
 module.exports = router;

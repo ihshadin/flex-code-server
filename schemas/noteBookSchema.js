@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 
-const nodeBookSchema = mongoose.Schema({
+const noteBookSchema = mongoose.Schema({
         title: String,
         details: String,
 })
 
-module.exports = nodeBookSchema;
+module.exports = noteBookSchema;
