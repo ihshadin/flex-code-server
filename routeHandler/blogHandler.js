@@ -48,7 +48,7 @@ router.get("/:id", async (req, res) => {
 
 router.get('/', async (req, res) => {
   const page = parseInt(req.query.page) || 0;
-  const limit = parseInt(req.query.limit) || 10;
+  const limit = parseInt(req.query.limit) || 3;
   try {
     const result = await Blog.find()
       .skip(page * limit)

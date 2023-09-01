@@ -5,7 +5,7 @@ const problemSchema = require("../schemas/problemSchema");
 const Problem = new mongoose.model("Problem", problemSchema);
 
 // Get all problems 
-router.get("/", async (req, res) => {
+router.get("/all", async (req, res) => {
   try {
     const searchText = req.query.search;
     const problemLevel = req.query.level;
@@ -59,7 +59,19 @@ router.post("/", async (req, res) => {
   }
 });
 
-
+//Pagination
+router.get('/', async (req, res) => {
+  const page = parseInt(req.query.page) || 0;
+  const limit = parseInt(req.query.limit) || 10;
+  try {
+    const result = await Problem.find()
+      .skip(page * limit)
+      .limit(limit);
+    res.send(result);
+  } catch (error) {
+    res.status(500).send('Internal Server Error');
+  }
+});
 
 
 module.exports = router;
