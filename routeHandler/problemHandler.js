@@ -7,21 +7,55 @@ const Problem = new mongoose.model("Problem", problemSchema);
 // Get all problems 
 router.get("/all", async (req, res) => {
   try {
-      const searchText = req.query.search;
-      const problemLevel = req.query.level;
-      let query = {};
-      if (problemLevel) {
-          query.level = problemLevel;
-      }
-      if (searchText) {
-          query.title = { $regex: searchText, $options: "i" };
-      }
-      const data = await Problem.find(query);
-      res.json(data);
+    const searchText = req.query.search;
+    const problemLevel = req.query.level;
+    let query = {};
+    if (problemLevel) {
+      query.level = problemLevel;
+    }
+    if (searchText) {
+      query.title = { $regex: searchText, $options: "i" };
+    }
+    const data = await Problem.find(query);
+    res.json(data);
   } catch (err) {
-      res.status(500).json({
-          message: "error",
+    res.status(500).json({
+      message: "error",
+    });
+  }
+});
+
+// Get Single problem details
+router.get("/:id", async (req, res) => {
+  const problemId = req.params.id;
+  try {
+    const problem = await Problem.findById(problemId);
+    if (!problem) {
+      return res.status(404).json({
+        message: "Problem not found",
       });
+    }
+    res.json(problem);
+  } catch (err) {
+    res.status(500).json({
+      message: "error",
+    });
+  }
+});
+
+
+// Create a new Add problem solving code
+router.post("/", async (req, res) => {
+  const newProblem = new Problem(req.body);
+  try {
+    await newProblem.save();
+    res.status(200).json({
+      message: "success",
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: "error",
+    });
   }
 });
 
@@ -38,23 +72,6 @@ router.get('/', async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 });
-
-// Create a new Add problem solving code
-router.post("/", async (req, res) => {
-    const newProblem = new Problem(req.body);
-    try {
-      await newProblem.save();
-      res.status(200).json({
-        message: "success",
-      });
-    } catch (err) {
-      res.status(500).json({
-        message: "error",
-      });
-    }
-  });
-
-
 
 
 module.exports = router;
