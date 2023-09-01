@@ -23,7 +23,7 @@ router.get("/all", async (req, res) => {
       message: "error",
     });
   }
-});
+})
 
 // Get Single problem details
 router.get("/:id", async (req, res) => {
