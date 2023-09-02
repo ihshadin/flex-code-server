@@ -18,6 +18,7 @@ const userSchema = new mongoose.Schema({
   fbLinks: String,
   LinkLinks: String,
   webSiteLink: String,
+  github: String,
   mobile: Number,
   dateOfBirth: Date,
   education: Array,
