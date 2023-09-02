@@ -17,6 +17,7 @@ router.get("/all", async (req, res) => {
 
 // get all users base on email
 router.get("/", async (req, res) => {
+  // console.log(req.query.email);
   try {
     const users = await User.find({ email: req.query.email });
     return res.status(200).json(users);
@@ -29,13 +30,14 @@ router.get("/", async (req, res) => {
 
 // User Post
 router.post("/", async (req, res) => {
+  const upDateUser = req.body;
+  // console.log(upDateUser);
   try {
-    const newUser = req.body;
-    const existingUser = await User.findOne({ email: newUser?.email });
+    const existingUser = await User.findOne({ email: upDateUser?.email });
     if (existingUser) {
       return res.status(400).json({ message: "user already exists" });
     } else {
-      const newUserInstance = new User(newUser);
+      const newUserInstance = new User(upDateUser);
       await newUserInstance.save();
       res.status(200).json({
         message: "user was inserted successfully",
@@ -93,19 +95,19 @@ router.post("/all/genarel/:email", async (req, res) => {
 
 router.patch("/", async (req, res) => {
   try {
-    const newUser = req.body;
-    console.log(newUser);
-    const updatedData = { gender: newUser.value };
-
+    const updatedData = req.body;
     const updateUser = await User.updateOne(
-      { email: newUser?.email },
+      { email: req.body.email },
       updatedData
     ).then((result) => {
-      if (result.modifiedCount > 0) {
-        console.log("Document updated successfully.");
-      } else {
-        console.log("No document matched the filter.");
-      }
+      res.send(result);
+
+      // console.log("104", result);
+      // if (result.modifiedCount > 0) {
+      //   console.log("Document updated successfully.");
+      // } else {
+      //   console.log("No document matched the filter.");
+      // }
     });
 
     // console.log(updateUser);

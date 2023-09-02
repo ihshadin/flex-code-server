@@ -16,13 +16,23 @@ const Payment = mongoose.model("Payment", paymentSchema);
 
 router.get("/", async (req, res) => {
   try {
-    const users = await Payment.find({ paidStatus: "paid" }, "name paidStatus");
+    const users = await Payment.find(
+      { paidStatus: "paid" },
+      "name paidStatus email"
+    );
     return res.status(200).json(users);
   } catch (error) {
     return res
       .status(500)
       .json({ message: "Error fetching Premum user", error: error.message });
   }
+});
+
+// query from singel payemt paid users
+
+router.get("/email", async (req, res) => {
+  const paidUser = await Payment.findOne({ email: req.query.email });
+  res.send(paidUser);
 });
 
 // router.post("/", async (req, res) => {
@@ -181,22 +191,22 @@ router.post("/", async (req, res) => {
     if (paidUser.modifiedCount > 0) {
       res.redirect(`http://localhost:5173/payment/success/${newTransactionId}`);
     }
-    console.log("success route ", paidUser);
+    // console.log("success route ", paidUser);
 
     // res.redirect(`http://localhost:5173/payment/success/${newTransactionId}`);
   });
 
   router.post("/fail/:tranId", async (req, res) => {
-    console.log(" fail ", req.params.tranId);
+    // console.log(" fail ", req.params.tranId);
 
-    res.redirect(`http://localhost:5173/payment/fail/${newTransactionId}`);
+    // res.redirect(`http://localhost:5173/payment/fail/${newTransactionId}`);
     const unPaidUser = await Payment.deleteOne({
       transactionId: req.params.tranId,
     });
     if (unPaidUser.deletedCount) {
       res.redirect(`http://localhost:5173/payment/fail/${newTransactionId}`);
     }
-    console.log("fail route ", unPaidUser);
+    // console.log("fail route ", unPaidUser);
   });
 });
 
