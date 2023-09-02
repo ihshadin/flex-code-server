@@ -2,11 +2,11 @@ const express = require("express");
 const mongoose = require("mongoose");
 const router = express.Router();
 const userSchema = require("../schemas/userSchema");
-const Student = new mongoose.model("Student", userSchema);
+const User = new mongoose.model("User", userSchema);
 
 router.get("/all", async (req, res) => {
   try {
-    const users = await Student.find();
+    const users = await User.find();
     return res.status(200).json(users);
   } catch (error) {
     return res
@@ -15,11 +15,10 @@ router.get("/all", async (req, res) => {
   }
 });
 
-// get all users
+// get all users base on email
 router.get("/", async (req, res) => {
-  console.log("This is home page for server site", req.query.email);
   try {
-    const users = await Student.find({ email: req.query.email });
+    const users = await User.find({ email: req.query.email });
     return res.status(200).json(users);
   } catch (error) {
     return res
@@ -28,14 +27,15 @@ router.get("/", async (req, res) => {
   }
 });
 
+// User Post
 router.post("/", async (req, res) => {
   try {
     const newUser = req.body;
-    const existingUser = await Student.findOne({ email: newUser?.email });
+    const existingUser = await User.findOne({ email: newUser?.email });
     if (existingUser) {
       return res.status(400).json({ message: "user already exists" });
     } else {
-      const newUserInstance = new Student(newUser);
+      const newUserInstance = new User(newUser);
       await newUserInstance.save();
       res.status(200).json({
         message: "user was inserted successfully",
@@ -47,14 +47,13 @@ router.post("/", async (req, res) => {
   }
 });
 
+// User make admin
 router.post("/all/admin/:email", async (req, res) => {
   const email = req.params.email;
 
-  console.log(email);
-
   try {
     const email = req.params.email;
-    const admin = await Student.updateOne(
+    const admin = await User.updateOne(
       { email: email },
       {
         $set: {
@@ -70,10 +69,12 @@ router.post("/all/admin/:email", async (req, res) => {
     res.status(500).json({ message: "Server Error", error: error.message });
   }
 });
+
+// Make user general
 router.post("/all/genarel/:email", async (req, res) => {
   try {
     const email = req.params.email;
-    const admin = await Student.updateOne(
+    const admin = await User.updateOne(
       { email: email },
       {
         $set: {
@@ -96,11 +97,10 @@ router.patch("/", async (req, res) => {
     console.log(newUser);
     const updatedData = { gender: newUser.value };
 
-    const updateUser = await Student.updateOne(
+    const updateUser = await User.updateOne(
       { email: newUser?.email },
       updatedData
     ).then((result) => {
-      console.log(result);
       if (result.modifiedCount > 0) {
         console.log("Document updated successfully.");
       } else {
@@ -112,11 +112,11 @@ router.patch("/", async (req, res) => {
 
     // res.send(updateUser);
 
-    // const existingUser = await Student.findOne({ email: newUser?.email });
+    // const existingUser = await User.findOne({ email: newUser?.email });
     // if (existingUser) {
     //   return res.status(400).json({ message: "user already exists" });
     // } else {
-    //   const newUserInstance = new Student(newUser);
+    //   const newUserInstance = new User(newUser);
     //   await newUserInstance.save();
     //   res.status(200).json({
     //     message: "user was inserted successfully",
