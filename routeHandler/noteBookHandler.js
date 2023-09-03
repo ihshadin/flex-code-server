@@ -7,7 +7,8 @@ const NoteBook = new mongoose.model("noteBook", noteBookSchema);
 // get all NoteBook
 router.get("/", async (req, res) => {
   try {
-    const NoteBooks = await NoteBook.find();
+    const userEmail = req.query.email
+    const NoteBooks = await NoteBook.find({ userEmail: userEmail });
     res.json(NoteBooks);
   } catch (error) {
     res.status(500).send('Server Error');
