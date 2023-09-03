@@ -16,23 +16,13 @@ const Payment = mongoose.model("Payment", paymentSchema);
 
 router.get("/", async (req, res) => {
   try {
-    const users = await Payment.find(
-      { paidStatus: "paid" },
-      "name paidStatus email"
-    );
+    const users = await Payment.find({ paidStatus: "paid" }, "name paidStatus");
     return res.status(200).json(users);
   } catch (error) {
     return res
       .status(500)
       .json({ message: "Error fetching Premum user", error: error.message });
   }
-});
-
-// query from singel payemt paid users
-
-router.get("/email", async (req, res) => {
-  const paidUser = await Payment.findOne({ email: req.query.email });
-  res.send(paidUser);
 });
 
 // router.post("/", async (req, res) => {
@@ -112,8 +102,8 @@ router.post("/", async (req, res) => {
     total_amount: payment?.amount,
     currency: payment?.currency,
     tran_id: newTransactionId,
-    success_url: `https://flex-code-server.vercel.app/payment/success/${newTransactionId}`,
-    fail_url: `https://flex-code-server.vercel.app/payment/fail/${newTransactionId}`,
+    success_url: `http://localhost:5000/payment/success/${newTransactionId}`,
+    fail_url: `http://localhost:5000/payment/fail/${newTransactionId}`,
     cancel_url: "http://localhost:3030/cancel",
     ipn_url: "http://localhost:3030/ipn",
     shipping_method: "Courier",
@@ -191,22 +181,22 @@ router.post("/", async (req, res) => {
     if (paidUser.modifiedCount > 0) {
       res.redirect(`http://localhost:5173/payment/success/${newTransactionId}`);
     }
-    // console.log("success route ", paidUser);
+    console.log("success route ", paidUser);
 
     // res.redirect(`http://localhost:5173/payment/success/${newTransactionId}`);
   });
 
   router.post("/fail/:tranId", async (req, res) => {
-    // console.log(" fail ", req.params.tranId);
+    console.log(" fail ", req.params.tranId);
 
-    // res.redirect(`http://localhost:5173/payment/fail/${newTransactionId}`);
+    res.redirect(`http://localhost:5173/payment/fail/${newTransactionId}`);
     const unPaidUser = await Payment.deleteOne({
       transactionId: req.params.tranId,
     });
     if (unPaidUser.deletedCount) {
       res.redirect(`http://localhost:5173/payment/fail/${newTransactionId}`);
     }
-    // console.log("fail route ", unPaidUser);
+    console.log("fail route ", unPaidUser);
   });
 });
 
