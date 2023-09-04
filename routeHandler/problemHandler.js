@@ -5,10 +5,13 @@ const problemSchema = require("../schemas/problemSchema");
 const Problem = new mongoose.model("Problem", problemSchema);
 
 // Get all problems 
-router.get("/all", async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const searchText = req.query.search;
     const problemLevel = req.query.level;
+    const page = parseInt(req.query.page) || 0;
+    const itemsPerPage = parseInt(req.query.itemsPerPage) || 10;
+
     let query = {};
     if (problemLevel) {
       query.level = problemLevel;
@@ -16,8 +19,16 @@ router.get("/all", async (req, res) => {
     if (searchText) {
       query.title = { $regex: searchText, $options: "i" };
     }
-    const data = await Problem.find(query);
-    res.json(data);
+
+    // calculate the skip value
+    const skip = page * itemsPerPage;
+
+    // Total number of problems
+    const totalCount = await Problem.countDocuments(query);
+
+    const data = await Problem.find(query).skip(skip).limit(itemsPerPage);
+
+    res.json({ data, totalCount });
   } catch (err) {
     res.status(500).json({
       message: "error",
@@ -59,19 +70,6 @@ router.post("/", async (req, res) => {
   }
 });
 
-//Pagination
-router.get('/', async (req, res) => {
-  const page = parseInt(req.query.page) || 0;
-  const limit = parseInt(req.query.limit) || 10;
-  try {
-    const result = await Problem.find()
-      .skip(page * limit)
-      .limit(limit);
-    res.send(result);
-  } catch (error) {
-    res.status(500).send('Internal Server Error');
-  }
-});
 
 
 module.exports = router;
