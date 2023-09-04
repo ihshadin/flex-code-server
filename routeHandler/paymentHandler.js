@@ -191,22 +191,15 @@ router.post("/", async (req, res) => {
     if (paidUser.modifiedCount > 0) {
       res.redirect(`http://localhost:5173/payment/success/${newTransactionId}`);
     }
-    // console.log("success route ", paidUser);
-
-    // res.redirect(`http://localhost:5173/payment/success/${newTransactionId}`);
   });
 
   router.post("/fail/:tranId", async (req, res) => {
-    // console.log(" fail ", req.params.tranId);
-
-    // res.redirect(`http://localhost:5173/payment/fail/${newTransactionId}`);
     const unPaidUser = await Payment.deleteOne({
       transactionId: req.params.tranId,
     });
     if (unPaidUser.deletedCount) {
       res.redirect(`http://localhost:5173/payment/fail/${newTransactionId}`);
     }
-    // console.log("fail route ", unPaidUser);
   });
 });
 
