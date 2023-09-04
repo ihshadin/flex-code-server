@@ -6,36 +6,20 @@ const verifyLogin = require("../middlewares/verifyLogin");
 const Blog = new mongoose.model("Blog", blogSchema);
 
 
-router.get("/all", async (req, res) => {
-  await Blog.find()
-    .then((data) => {
-      res.json({
-        result: data,
-
-      });
-    })
-    .catch((err) => {
-      console.log(err);
-      res.json({
-        message: "error",
-      });
-    });
-});
-
-// Get Single blog details
-router.get("/:id", async (req, res) => {
-  const blogId = req.params.id;
+router.get("/", async (req, res) => {
   try {
-    const blog = await Blog.findById(blogId);
-    if (!blog) {
-      return res.status(404).json({
-        message: "Blog not found",
-      });
-    }
-    res.json({
-      result: blog,
-      message: "success",
-    });
+    const page = parseInt(req.query.page) || 0;
+    const itemsPerPage = parseInt(req.query.itemsPerPage) || 10;
+
+    // calculate the skip value
+    const skip = page * itemsPerPage;
+
+    // Total number of blogs
+    const totalCount = await Blog.countDocuments();
+
+    const data = await Blog.find().skip(skip).limit(itemsPerPage);
+
+    res.json({ data, totalCount });
   } catch (err) {
     res.status(500).json({
       message: "error",
@@ -43,22 +27,23 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-
-// pagination 
-
-router.get('/', async (req, res) => {
-  const page = parseInt(req.query.page) || 0;
-  const limit = parseInt(req.query.limit) || 3;
+// Get Single blog details
+router.get("/:id", async (req, res) => {
   try {
-    const result = await Blog.find()
-      .skip(page * limit)
-      .limit(limit);
-    res.send(result);
-  } catch (error) {
-    res.status(500).send('Internal Server Error');
+    const blogId = req.params.id;
+    const blog = await Blog.findById(blogId);
+    if (!blog) {
+      return res.status(404).json({
+        message: "Blog not found",
+      });
+    }
+    res.json(blog);
+  } catch (err) {
+    res.status(500).json({
+      message: "error",
+    });
   }
 });
-
 
 // Create a new Blog
 router.post("/", async (req, res) => {
