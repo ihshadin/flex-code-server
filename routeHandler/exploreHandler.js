@@ -2,12 +2,12 @@ const express = require("express");
 const mongoose = require("mongoose");
 const router = express.Router();
 const exploreSchema = require('../schemas/exploreSchema');
-const explore = new mongoose.model("exploreDetails", exploreSchema);
+const Explore = new mongoose.model("Explore", exploreSchema);
 
 // get all NoteBook
 router.get("/", async (req, res) => {
     try {
-        const explores = await explore.find();
+        const explores = await Explore.find();
         res.json(explores);
     } catch (error) {
         res.status(500).send('Server Error');
@@ -18,13 +18,13 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
     try {
         const ExploreId = req.params.id;
-        const Explore = await explore.findById(ExploreId);
-        if (!Explore) {
+        const explore = await Explore.findById(ExploreId);
+        if (!explore) {
             return res.status(404).json({
                 message: "Explore not found!",
             });
         }
-        res.json(Explore);
+        res.json(explore);
     } catch (err) {
         res.status(500).send('Server Error');
     }
