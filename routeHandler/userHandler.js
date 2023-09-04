@@ -15,9 +15,7 @@ router.get("/all", async (req, res) => {
   }
 });
 
-// get all users base on email
 router.get("/", async (req, res) => {
-  // console.log(req.query.email);
   try {
     const users = await User.find({ email: req.query.email });
     return res.status(200).json(users);
@@ -31,7 +29,6 @@ router.get("/", async (req, res) => {
 // User Post
 router.post("/", async (req, res) => {
   const upDateUser = req.body;
-  // console.log(upDateUser);
   try {
     const existingUser = await User.findOne({ email: upDateUser?.email });
     if (existingUser) {
@@ -101,48 +98,10 @@ router.patch("/", async (req, res) => {
       updatedData
     ).then((result) => {
       res.send(result);
-
-      // console.log("104", result);
-      // if (result.modifiedCount > 0) {
-      //   console.log("Document updated successfully.");
-      // } else {
-      //   console.log("No document matched the filter.");
-      // }
     });
-
-    // console.log(updateUser);
-
-    // res.send(updateUser);
-
-    // const existingUser = await User.findOne({ email: newUser?.email });
-    // if (existingUser) {
-    //   return res.status(400).json({ message: "user already exists" });
-    // } else {
-    //   const newUserInstance = new User(newUser);
-    //   await newUserInstance.save();
-    //   res.status(200).json({
-    //     message: "user was inserted successfully",
-    //     user: newUserInstance,
-    //   });
-    // }
   } catch (error) {
     res.status(500).json({ message: "Server Error", error: error.message });
   }
 });
-
-// router.post("/users", async (req, res) => {
-//   const user = req.body;
-//   console.log(user);
-
-//   const query = { email: user.email };
-//   const existingUser = await userCollection.findOne(query);
-
-//   if (existingUser) {
-//     return res.send({ message: "user already existinge" });
-//   }
-
-//   const result = await userCollection.insertOne(user);
-//   res.send(result);
-// });
 
 module.exports = router;
