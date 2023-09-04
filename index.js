@@ -61,7 +61,7 @@ app.use("/noteBooks", noteBookHandler);
 app.use("/payment", paymentHandler);
 app.use("/solvedProblems", solvedProblems);
 app.use("/problem", problemHandler);
-app.use("/exploredetails", exploreHandler);
+app.use("/explore", exploreHandler);
 
 app.get("/", (req, res) => {
   res.send("FlexCode. Unlock your code knowledge");
