@@ -5,14 +5,14 @@ const { mongoose } = require('mongoose');
 const SolvedProblem = new mongoose.model("SolvedProblem", solvedProblemsSchema)
 
 // All solved Problems get
-router.get('/', async (req, res) => {
-    try {
-        const solvedProblems = await SolvedProblem.find();
-        res.json(solvedProblems);
-    } catch (error) {
-        res.status(500).send('Server Error');
-    }
-})
+// router.get('/', async (req, res) => {
+//     try {
+//         const solvedProblems = await SolvedProblem.find();
+//         res.json(solvedProblems);
+//     } catch (error) {
+//         res.status(500).send('Server Error');
+//     }
+// })
 
 // specific user get his solved problem
 router.get('/userSolveProblem', async (req, res) => {
@@ -26,7 +26,7 @@ router.get('/userSolveProblem', async (req, res) => {
 })
 
 // Data for leaderboard
-router.get('/leaderboard', async (req, res) => {
+router.get('/topperdata', async (req, res) => {
     try {
         const leaderboardData = await SolvedProblem.aggregate([
             {
@@ -63,6 +63,14 @@ router.get('/leaderboard', async (req, res) => {
                 $sort: { points: -1 },
             },
         ]);
+
+        // Sort the leaderboard data by points in descending order
+        leaderboardData.sort((a, b) => b.points - a.points);
+
+        // Calculate and assign ranks to each user
+        leaderboardData.forEach((user, index) => {
+            user.rank = index + 1; // Ranks start from 1
+        });
 
         res.json(leaderboardData);
     } catch (error) {
