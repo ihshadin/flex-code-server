@@ -4,16 +4,6 @@ const solvedProblemsSchema = require('../schemas/solvedProblemSchema');
 const { mongoose } = require('mongoose');
 const SolvedProblem = new mongoose.model("SolvedProblem", solvedProblemsSchema)
 
-// All solved Problems get
-// router.get('/', async (req, res) => {
-//     try {
-//         const solvedProblems = await SolvedProblem.find();
-//         res.json(solvedProblems);
-//     } catch (error) {
-//         res.status(500).send('Server Error');
-//     }
-// })
-
 // specific user get his solved problem
 router.get('/userSolveProblem', async (req, res) => {
     try {
@@ -40,14 +30,6 @@ router.get('/topperdata', async (req, res) => {
             {
                 $unwind: '$userData',
             },
-            // {
-            //     $project: {
-            //         userName: '$userData.username',
-            //         // userPhoto: '$userData.photo',
-            //         userEmail: 1,
-            //         points: 1,
-            //     },
-            // },
             {
                 $group: {
                     _id: '$userEmail',
