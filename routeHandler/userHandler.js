@@ -14,10 +14,10 @@ router.get("/all", async (req, res) => {
       .json({ message: "Error fetching users", error: error.message });
   }
 });
-
+// Single User (author) Data Load
 router.get("/", async (req, res) => {
   try {
-    const users = await User.find({ email: req.query.email });
+    const users = await User.findOne({ email: req.query.email });
     return res.status(200).json(users);
   } catch (error) {
     return res
