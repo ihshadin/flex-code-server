@@ -61,15 +61,35 @@ router.get('/topperdata', async (req, res) => {
     }
 });
 
+// router.post('/', async (req, res) => {
+//     try {
+//         console.log(req.body);
+//         const solvedProblem = new SolvedProblem(req.body)
+//         await solvedProblem.save()
+//         res.status(200).json({ message: "success" })
+//     } catch (error) {
+//         res.status(500).json({ message: "error" })
+//     }
+// })
+
 router.post('/', async (req, res) => {
     try {
-        const solvedProblem = new SolvedProblem(req.body)
-        await solvedProblem.save()
-        res.status(200).json({ message: "success" })
+        const title = req.body.title;
+        const userEmail = req.body.userEmail;
+        const existingSolvedProblem = await SolvedProblem.findOne({ title: title, userEmail: userEmail });
+        
+        if(existingSolvedProblem){
+            // console.log('user already exists');
+            res.status(403).json({ message: "Problem already solved" })
+        } else {
+            const solvedProblem = new SolvedProblem(req.body)
+            await solvedProblem.save()
+            res.status(200).json({ message: "success" })
+        }
     } catch (error) {
+        console.log(error);
         res.status(500).json({ message: "error" })
     }
 })
-
 
 module.exports = router;
