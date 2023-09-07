@@ -108,7 +108,7 @@ router.post("/", async (req, res) => {
     const UsersModel = mongoose.model('User');
     await UsersModel.updateOne(
       { email: userEmail },
-      { $set: { userRole: "premium" } }
+      { $set: { isPremium: true } }
     );
 
     res.redirect(`http://localhost:5173/payment/success/${transactionId}`);
