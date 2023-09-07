@@ -57,27 +57,6 @@ router.post("/", async (req, res) => {
   }
 });
 
-// User make premium user
-router.post("/all/premium/:email", async (req, res) => {
-  try {
-    const email = req.params.email;
-    const premium = await User.updateOne(
-      { email: email },
-      {
-        $set: {
-          userRole: "premium",
-        },
-      }
-    );
-    res.status(200).json({
-      message: "Make Premium successfull",
-      user: premium,
-    });
-  } catch (error) {
-    res.status(500).json({ message: "Server Error", error: error.message });
-  }
-});
-
 // User make admin
 router.post("/all/admin/:email", async (req, res) => {
 
