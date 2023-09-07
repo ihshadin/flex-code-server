@@ -38,7 +38,7 @@ router.get("/", async (req, res) => {
 
 // Get problems by language
 // Get all problems 
-router.get("/:language", async (req, res) => {
+router.get("/language/:language", async (req, res) => {
   try {
     const language = req.params.language;
     const languageRegExp = new RegExp(language, 'i');
