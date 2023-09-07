@@ -14,7 +14,18 @@ router.get("/all", async (req, res) => {
       .json({ message: "Error fetching users", error: error.message });
   }
 });
-// Single User (author) Data Load
+// ---------------------------jahid----------------------------------------
+router.get("/:username", async (req, res) => {
+  try {
+    const user = await User.findOne({ username: req.params.username });
+    return res.status(200).json(user);
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "Error fetching users", error: error.message });
+  }
+});
+
 router.get("/", async (req, res) => {
   try {
     const users = await User.findOne({ email: req.query.email });
@@ -41,27 +52,6 @@ router.post("/", async (req, res) => {
         user: newUserInstance,
       });
     }
-  } catch (error) {
-    res.status(500).json({ message: "Server Error", error: error.message });
-  }
-});
-
-// User make premium user
-router.post("/all/premium/:email", async (req, res) => {
-  try {
-    const email = req.params.email;
-    const premium = await User.updateOne(
-      { email: email },
-      {
-        $set: {
-          userRole: "premium",
-        },
-      }
-    );
-    res.status(200).json({
-      message: "Make Premium successfull",
-      user: premium,
-    });
   } catch (error) {
     res.status(500).json({ message: "Server Error", error: error.message });
   }

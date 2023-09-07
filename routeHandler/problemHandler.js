@@ -10,7 +10,7 @@ router.get("/", async (req, res) => {
     const searchText = req.query.search;
     const problemLevel = req.query.level;
     const page = parseInt(req.query.page) || 0;
-    const itemsPerPage = parseInt(req.query.itemsPerPage) || 10;
+    const itemsPerPage = parseInt(req.query.itemsPerPage);
 
     let query = {};
     if (problemLevel) {
@@ -29,6 +29,32 @@ router.get("/", async (req, res) => {
     const data = await Problem.find(query).skip(skip).limit(itemsPerPage);
 
     res.json({ data, totalCount });
+  } catch (err) {
+    res.status(500).json({
+      message: "error",
+    });
+  }
+})
+
+// Get problems by language
+// Get all problems 
+router.get("/language/:language", async (req, res) => {
+  try {
+    const language = req.params.language;
+    const languageRegExp = new RegExp(language, 'i');
+
+    const page = parseInt(req.query.page) || 0;
+    const itemsPerPage = parseInt(req.query.itemsPerPage);
+
+    // calculate the skip value
+    const skip = page * itemsPerPage;
+
+    // Total number of problems
+    const totalCount = await Problem.countDocuments({ language: languageRegExp });
+
+    const languageProblems = await Problem.find({ language: languageRegExp }).skip(skip).limit(itemsPerPage);
+
+    res.json({ languageProblems, totalCount });
   } catch (err) {
     res.status(500).json({
       message: "error",

@@ -90,19 +90,28 @@ router.post("/", async (req, res) => {
   }
 
   router.post("/success/:tranId", async (req, res) => {
-    const paidUser = await Payment.updateOne(
-      {
-        transactionId: req.params.tranId,
-      },
-      {
-        $set: {
-          paidStatus: "paid",
-        },
-      }
+    const transactionId = req.params.tranId;
+    const updatedPayment = await Payment.findOneAndUpdate(
+      { transactionId },
+      { $set: { paidStatus: "paid" } },
+      { new: true }
     );
-    if (paidUser.modifiedCount > 0) {
-      res.redirect(`http://localhost:5173/payment/success/${newTransactionId}`);
+
+    if (!updatedPayment) {
+      return res.status(404).send('Payment not found');
     }
+
+    updatedPayment.userInfo = req.body.userInfo;
+    await updatedPayment.save();
+
+    const userEmail = updatedPayment.email;
+    const UsersModel = mongoose.model('User');
+    await UsersModel.updateOne(
+      { email: userEmail },
+      { $set: { userRole: "premium" } }
+    );
+
+    res.redirect(`http://localhost:5173/payment/success/${transactionId}`);
   });
 
   router.post("/fail/:tranId", async (req, res) => {

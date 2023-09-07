@@ -46,6 +46,7 @@ const paymentHandler = require("./routeHandler/paymentHandler");
 const solvedProblems = require("./routeHandler/solvedProblems");
 const problemHandler = require("./routeHandler/problemHandler");
 const exploreHandler = require("./routeHandler/exploreHandler");
+const sendEmail = require("./routeHandler/sendEmailHandler");
 
 
 // application routes
@@ -62,6 +63,7 @@ app.use("/payment", paymentHandler);
 app.use("/solvedProblems", solvedProblems);
 app.use("/problem", problemHandler);
 app.use("/explore", exploreHandler);
+app.use("/sendEmail", sendEmail);
 
 app.get("/", (req, res) => {
   res.send("FlexCode. Unlock your code knowledge");
