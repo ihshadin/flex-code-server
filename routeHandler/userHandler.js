@@ -14,7 +14,7 @@ router.get("/all", async (req, res) => {
       .json({ message: "Error fetching users", error: error.message });
   }
 });
-// ---------------------------jahid----------------------------------------
+
 router.get("/:username", async (req, res) => {
   try {
     const user = await User.findOne({ username: req.params.username });
