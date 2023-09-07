@@ -52,14 +52,6 @@ router.get('/topperdata', async (req, res) => {
             {
                 $unwind: '$userData',
             },
-            // {
-            //     $project: {
-            //         userName: '$userData.username',
-            //         // userPhoto: '$userData.photo',
-            //         userEmail: 1,
-            //         points: 1,
-            //     },
-            // },
             {
                 $group: {
                     _id: '$userEmail',
