@@ -14,7 +14,18 @@ router.get("/all", async (req, res) => {
       .json({ message: "Error fetching users", error: error.message });
   }
 });
-// Single User (author) Data Load
+// ---------------------------jahid----------------------------------------
+router.get("/:username", async (req, res) => {
+  try {
+    const user = await User.findOne({ username: req.params.username });
+    return res.status(200).json(user);
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "Error fetching users", error: error.message });
+  }
+});
+
 router.get("/", async (req, res) => {
   try {
     const users = await User.findOne({ email: req.query.email });

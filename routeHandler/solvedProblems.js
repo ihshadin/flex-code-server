@@ -4,16 +4,38 @@ const solvedProblemsSchema = require('../schemas/solvedProblemSchema');
 const { mongoose } = require('mongoose');
 const SolvedProblem = new mongoose.model("SolvedProblem", solvedProblemsSchema)
 
+// All solved Problems get
+// router.get('/', async (req, res) => {
+//     try {
+//         const solvedProblems = await SolvedProblem.find();
+//         res.json(solvedProblems);
+//     } catch (error) {
+//         res.status(500).send('Server Error');
+//     }
+// })
+
+// ----------------------jahid------------------------------------------
 // specific user get his solved problem
-router.get('/userSolveProblem', async (req, res) => {
+router.get('/userSolveProblem/:username', async (req, res) => {
     try {
-        const userEmail = req.query.email
-        const solvedProblems = await SolvedProblem.find({ userEmail: userEmail });
+        const userName = req.params.username;
+        const solvedProblems = await SolvedProblem.find({ username: userName });
         res.json(solvedProblems);
     } catch (error) {
         res.status(500).send('Server Error');
     }
 })
+
+// // specific user get his solved problem
+// router.get('/userSolveProblem', async (req, res) => {
+//     try {
+//         const userEmail = req.query.email
+//         const solvedProblems = await SolvedProblem.find({ userEmail: userEmail });
+//         res.json(solvedProblems);
+//     } catch (error) {
+//         res.status(500).send('Server Error');
+//     }
+// })
 
 // Data for leaderboard
 router.get('/topperdata', async (req, res) => {
@@ -22,8 +44,8 @@ router.get('/topperdata', async (req, res) => {
             {
                 $lookup: {
                     from: 'users', // Name of the users collection
-                    localField: 'userEmail',
-                    foreignField: 'email',
+                    localField: 'username',
+                    foreignField: 'username',
                     as: 'userData',
                 },
             },
