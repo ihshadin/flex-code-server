@@ -1,17 +1,18 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const router = express.Router();
-const noteBookSchema = require('../schemas/noteBookSchema');
+const noteBookSchema = require("../schemas/noteBookSchema");
+const verifyLogin = require("../middlewares/verifyLogin");
 const NoteBook = new mongoose.model("noteBook", noteBookSchema);
 
 // get all NoteBook
-router.get("/", async (req, res) => {
+router.get("/", verifyLogin, async (req, res) => {
   try {
-    const userEmail = req.query.email
+    const userEmail = req.query.email;
     const NoteBooks = await NoteBook.find({ userEmail: userEmail });
     res.json(NoteBooks);
   } catch (error) {
-    res.status(500).send('Server Error');
+    res.status(500).send("Server Error");
   }
 });
 
@@ -27,7 +28,7 @@ router.get("/:id", async (req, res) => {
     }
     res.json(noteBook);
   } catch (err) {
-    res.status(500).send('Server Error');
+    res.status(500).send("Server Error");
   }
 });
 
@@ -40,7 +41,7 @@ router.post("/", async (req, res) => {
       message: "success",
     });
   } catch (err) {
-    res.status(500).send('Server Error');
+    res.status(500).send("Server Error");
   }
 });
 
