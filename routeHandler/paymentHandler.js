@@ -6,9 +6,11 @@ const SSLCommerzPayment = require("sslcommerz-lts");
 // const store_passwd = process.env.STORE_PASS;
 const is_live = false;
 const paymentSchema = require("../schemas/paymentSchema");
+const verifyLogin = require("../middlewares/verifyLogin");
+const verifyAdmin = require("../middlewares/verifyAdmin");
 const Payment = mongoose.model("Payment", paymentSchema);
 
-router.get("/", async (req, res) => {
+router.get("/", verifyLogin, verifyAdmin, async (req, res) => {
   try {
     const users = await Payment.find({ paidStatus: "paid" }, "name paidStatus");
     return res.status(200).json(users);
@@ -98,14 +100,14 @@ router.post("/", async (req, res) => {
     );
 
     if (!updatedPayment) {
-      return res.status(404).send('Payment not found');
+      return res.status(404).send("Payment not found");
     }
 
     updatedPayment.userInfo = req.body.userInfo;
     await updatedPayment.save();
 
     const userEmail = updatedPayment.email;
-    const UsersModel = mongoose.model('User');
+    const UsersModel = mongoose.model("User");
     await UsersModel.updateOne(
       { email: userEmail },
       { $set: { isPremium: true } }

@@ -2,9 +2,11 @@ const express = require("express");
 const mongoose = require("mongoose");
 const router = express.Router();
 const userSchema = require("../schemas/userSchema");
+const verifyLogin = require("../middlewares/verifyLogin");
+const verifyAdmin = require("../middlewares/verifyAdmin");
 const User = new mongoose.model("User", userSchema);
 
-router.get("/all", async (req, res) => {
+router.get("/all", verifyLogin, async (req, res) => {
   try {
     const users = await User.find();
     return res.status(200).json(users);
@@ -12,6 +14,17 @@ router.get("/all", async (req, res) => {
     return res
       .status(500)
       .json({ message: "Error fetching users", error: error.message });
+  }
+});
+
+router.get("/count", async (req, res) => {
+  try {
+    const userCount = await User.countDocuments();
+    return res.status(200).json(userCount);
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "Error fetching user count", error: error.message });
   }
 });
 
@@ -26,7 +39,7 @@ router.get("/:username", async (req, res) => {
   }
 });
 
-router.get("/", async (req, res) => {
+router.get("/", verifyLogin, async (req, res) => {
   try {
     const users = await User.findOne({ email: req.query.email });
     return res.status(200).json(users);
@@ -58,8 +71,7 @@ router.post("/", async (req, res) => {
 });
 
 // User make admin
-router.post("/all/admin/:email", async (req, res) => {
-
+router.post("/all/admin/:email", verifyLogin, verifyAdmin, async (req, res) => {
   try {
     const email = req.params.email;
     const admin = await User.updateOne(
@@ -80,27 +92,32 @@ router.post("/all/admin/:email", async (req, res) => {
 });
 
 // Make user general
-router.post("/all/genarel/:email", async (req, res) => {
-  try {
-    const email = req.params.email;
-    const user = await User.updateOne(
-      { email: email },
-      {
-        $set: {
-          userRole: "genarel",
-        },
-      }
-    );
-    res.status(200).json({
-      message: "Make admin successfull",
-      user: user,
-    });
-  } catch (error) {
-    res.status(500).json({ message: "Server Error", error: error.message });
+router.post(
+  "/all/genarel/:email",
+  verifyLogin,
+  verifyAdmin,
+  async (req, res) => {
+    try {
+      const email = req.params.email;
+      const user = await User.updateOne(
+        { email: email },
+        {
+          $set: {
+            userRole: "genarel",
+          },
+        }
+      );
+      res.status(200).json({
+        message: "Make admin successfull",
+        user: user,
+      });
+    } catch (error) {
+      res.status(500).json({ message: "Server Error", error: error.message });
+    }
   }
-});
+);
 
-router.patch("/", async (req, res) => {
+router.patch("/", verifyLogin, async (req, res) => {
   try {
     const updatedData = req.body;
     const updateUser = await User.updateOne(
