@@ -8,10 +8,7 @@ const Feedback = new mongoose.model("Feedback", feedbackSchema);
 
 router.get('/', async (req, res) => {
     await Feedback.find().then((data) => {
-        res.json({
-            result: data,
-            message: 'success'
-        })
+        res.json(data)
     }).catch(err => {
         console.log(err);
         res.json({
@@ -25,7 +22,6 @@ router.post('/', async (req, res) => {
     await newFeedback.save().then((data) => {
 
         res.status(200).json({
-
             message: 'success'
         })
     }).catch((err) => {
