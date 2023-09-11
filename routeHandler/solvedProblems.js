@@ -14,7 +14,6 @@ const SolvedProblem = new mongoose.model("SolvedProblem", solvedProblemsSchema)
 //     }
 // })
 
-// ----------------------jahid------------------------------------------
 // specific user get his solved problem
 router.get('/userSolveProblem/:username', async (req, res) => {
     try {
