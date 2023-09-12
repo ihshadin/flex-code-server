@@ -10,7 +10,7 @@ const verifyLogin = require("../middlewares/verifyLogin");
 const verifyAdmin = require("../middlewares/verifyAdmin");
 const Payment = mongoose.model("Payment", paymentSchema);
 
-router.get("/", verifyLogin, verifyAdmin, async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const users = await Payment.find({ paidStatus: "paid" }, "name paidStatus");
     return res.status(200).json(users);
