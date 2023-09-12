@@ -17,7 +17,7 @@ router.get("/", verifyLogin, async (req, res) => {
 });
 
 // Get Single Note details
-router.get("/:id", async (req, res) => {
+router.get("/:id", verifyLogin, async (req, res) => {
   try {
     const NoteBookId = req.params.id;
     const noteBook = await NoteBook.findById(NoteBookId);
