@@ -7,7 +7,7 @@ const Feedback = new mongoose.model("Feedback", feedbackSchema);
 
 
 router.get('/', async (req, res) => {
-    await Feedback.find().then((data) => {
+    await Feedback.find().sort({data: 'desc'}).then((data) => {
         res.json(data)
     }).catch(err => {
         console.log(err);

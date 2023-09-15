@@ -17,7 +17,7 @@ router.get("/", async (req, res) => {
     // Total number of blogs
     const totalCount = await Blog.countDocuments();
 
-    const data = await Blog.find().skip(skip).limit(itemsPerPage);
+    const data = await Blog.find().skip(skip).limit(itemsPerPage).sort({data: 'desc'});
 
     res.json({ data, totalCount });
   } catch (err) {

@@ -12,6 +12,7 @@ const blogSchema = mongoose.Schema({
     level: String,
     isPremium: Boolean,
     language: String,
+    date: {type: Date, default: Date.now}
 })
 
 module.exports = blogSchema;

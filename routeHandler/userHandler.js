@@ -41,7 +41,7 @@ router.get("/:username", async (req, res) => {
 
 router.get("/", verifyLogin, async (req, res) => {
   try {
-    const users = await User.findOne({ email: req.query.email });
+    const users = await User.findOne({ email: req.query.email }).sort({data: 'desc'});
     return res.status(200).json(users);
   } catch (error) {
     return res

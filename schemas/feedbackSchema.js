@@ -6,7 +6,8 @@ const feedbackSchema = mongoose.Schema({
     thumbExpression: String,
     details: String,
     image: String,
-    rating: Number
+    rating: Number,
+    date: { type: Date, default: Date.now }
 })
 
 module.exports = feedbackSchema;

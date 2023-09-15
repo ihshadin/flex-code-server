@@ -66,7 +66,7 @@ router.get("/language/:language", async (req, res) => {
 router.get("/:id", async (req, res) => {
   const problemId = req.params.id;
   try {
-    const problem = await Problem.findById(problemId);
+    const problem = await Problem.findById(problemId).sort({data: 'desc'});
     if (!problem) {
       return res.status(404).json({
         message: "Problem not found",

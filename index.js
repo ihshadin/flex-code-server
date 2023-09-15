@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const app = express();
 const port = process.env.PORT || 5000;
-
+const colors = require('colors')
 // Middleware
 app.use(cors());
 app.use(express.json());
@@ -28,7 +28,7 @@ const databaseConnect = async () => {
       res.send({ token });
     });
 
-    console.log("Database connection successful");
+    console.log("Database connection successful".cyan.underline);
   } catch (error) {
     console.log(error.message);
     console.log("Database connection failed");
@@ -48,6 +48,7 @@ const solvedProblems = require("./routeHandler/solvedProblems");
 const problemHandler = require("./routeHandler/problemHandler");
 const exploreHandler = require("./routeHandler/exploreHandler");
 const sendEmail = require("./routeHandler/sendEmailHandler");
+const challenge = require("./routeHandler/challengeHandler");
 
 
 // application routes
@@ -66,10 +67,12 @@ app.use("/solvedProblems", solvedProblems);
 app.use("/problem", problemHandler);
 app.use("/explore", exploreHandler);
 app.use("/sendEmail", sendEmail);
+app.use("/challenge", challenge);
 
 app.get("/", (req, res) => {
   res.send("FlexCode. Unlock your code knowledge");
 });
+
 app.listen(port, (req, res) => {
-  console.log("FlexCode are runnin on: ", port);
+  console.log(`FlexCode are runnin on: ${port}`.yellow.bold.italic);
 });

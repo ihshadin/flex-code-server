@@ -10,7 +10,7 @@ const SendEmail = new mongoose.model("SendEmail", sendEmailSchema)
   // Define your GET route
   router.get('/', verifyLogin, verifyAdmin, async (req, res)=> {
     try {
-        const emails = await SendEmail.find();
+        const emails = await SendEmail.find().sort({data: 'desc'});
         res.json(emails);
     } catch (error){
         console.error(error);

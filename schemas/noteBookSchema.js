@@ -4,7 +4,7 @@ const noteBookSchema = mongoose.Schema({
         title: String,
         details: String,
         userEmail: String,
-        date: Date,
+        date: { type: Date, default: Date.now }
 })
 
 module.exports = noteBookSchema;

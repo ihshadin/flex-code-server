@@ -9,7 +9,7 @@ const NoteBook = new mongoose.model("noteBook", noteBookSchema);
 router.get("/", verifyLogin, async (req, res) => {
   try {
     const userEmail = req.query.email;
-    const NoteBooks = await NoteBook.find({ userEmail: userEmail });
+    const NoteBooks = await NoteBook.find({ userEmail: userEmail }).sort({data: 'desc'});
     res.json(NoteBooks);
   } catch (error) {
     res.status(500).send("Server Error");
