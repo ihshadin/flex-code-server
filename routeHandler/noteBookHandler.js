@@ -9,7 +9,9 @@ const NoteBook = new mongoose.model("noteBook", noteBookSchema);
 router.get("/", verifyLogin, async (req, res) => {
   try {
     const userEmail = req.query.email;
-    const NoteBooks = await NoteBook.find({ userEmail: userEmail }).sort({data: 'desc'});
+    const NoteBooks = await NoteBook.find({ userEmail: userEmail }).sort({
+      data: "desc",
+    });
     res.json(NoteBooks);
   } catch (error) {
     res.status(500).send("Server Error");
@@ -42,6 +44,24 @@ router.post("/", async (req, res) => {
     });
   } catch (err) {
     res.status(500).send("Server Error");
+  }
+});
+
+router.delete("/", async (req, res) => {
+  // console.log(projectId);
+  try {
+    const noteID = req.query.delete; // Assuming the query parameter is named 'delete'
+    const deletedNote = await NoteBook.findByIdAndDelete(noteID);
+
+    if (!deletedNote) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Note not found" });
+    }
+
+    res.json({ success: true, message: "Note deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
   }
 });
 
