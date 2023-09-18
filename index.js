@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const app = express();
 const port = process.env.PORT || 5000;
-const colors = require('colors')
+require('colors')
 // Middleware
 app.use(cors());
 app.use(express.json());
@@ -23,7 +23,7 @@ const databaseConnect = async () => {
     app.post("/jwt", (req, res) => {
       const user = req.body;
       const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
-        expiresIn: "1h",
+        expiresIn: "72h",
       });
       res.send({ token });
     });
@@ -37,7 +37,7 @@ const databaseConnect = async () => {
 databaseConnect();
 
 // Routes function
-const flexHandler = require("./routeHandler/flexHandler");
+
 const blogHandler = require("./routeHandler/blogHandler");
 const userHandler = require("./routeHandler/userHandler");
 const feedbackHandler = require("./routeHandler/feedbackHandler");
@@ -56,7 +56,6 @@ app.get("/", (req, res) => {
   res.send("FlexCode. Unlock your code knowledge");
 });
 
-app.use("/problems", flexHandler);
 app.use("/blog", blogHandler);
 app.use("/users", userHandler);
 app.use("/feedback", feedbackHandler);
@@ -74,5 +73,5 @@ app.get("/", (req, res) => {
 });
 
 app.listen(port, (req, res) => {
-  console.log(`FlexCode are runnin on: ${port}`.yellow.bold.italic);
+  console.log(`FlexCode are running on: ${port}`.red.bold);
 });
