@@ -1,7 +1,13 @@
 const mongoose = require('mongoose');
 
 const challengeSchema = new mongoose.Schema({
+  senderName: {
+      type: String
+    },
     sender: {
+      type: String
+    },
+    senderImg: {
       type: String
     },
     receiver: {
@@ -9,19 +15,15 @@ const challengeSchema = new mongoose.Schema({
     },
     winner: {
       type: String,
-
     },
     winnerTime: {
       type: Number,
-
     },
     problem: {
       type: String,
-
     },
     problemId: {
       type: mongoose.Schema.Types.ObjectId,
-
     },
     timeStamp: {
       type: Number,
