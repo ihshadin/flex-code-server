@@ -5,9 +5,20 @@ const router = express.Router();
 const Challenge = new mongoose.model("Challenge", challengeSchema);
 const { ObjectId } = require('mongodb')
 
-router.get('/:username', async (req, res) => {
+router.get('/receiver/:receiver', async (req, res) => {
   try {
-    const challenge = await Challenge.find({ receiver: req.params.username }).sort({ data: 'desc' });
+    const challenge = await Challenge.find({ receiver: req.params.receiver }).sort({ data: 'desc' });
+    // console.log(req.params.username);
+    return res.status(200).json(challenge);
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "Error fetching users", error: error.message });
+  }
+})
+router.get('/sender/:sender', async (req, res) => {
+  try {
+    const challenge = await Challenge.find({ sender: req.params.sender }).sort({ data: 'desc' });
     // console.log(req.params.username);
     return res.status(200).json(challenge);
   } catch (error) {
@@ -17,10 +28,10 @@ router.get('/:username', async (req, res) => {
   }
 })
 
-router.put('/one/:id/:ownId', (req, res) => {
-  const { id, ownId } = req.params;
+router.put('/update/:ownId', (req, res) => {
+  const { ownId } = req.params;
   const { winner, winnerTime } = req.body;
-  Challenge.findOneAndUpdate({ problemId: new ObjectId(id), _id: new ObjectId(ownId) }, { $set: { winner, winnerTime } })
+  Challenge.findOneAndUpdate({ _id: new ObjectId(ownId) }, { $set: { winner, winnerTime } })
     .then(message => {
       if (!message) {
         return res.status(404).send({ message: 'Message not found' });
