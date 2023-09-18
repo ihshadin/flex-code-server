@@ -46,5 +46,23 @@ router.post('/', async (req, res) => {
   }
 })
 
+router.delete("/", async (req, res) => {
+  // console.log(req.query.delete);
+  try {
+    const challengeID = req.query.delete; // Assuming the query parameter is named 'delete'
+    const deletedChallenge = await Challenge.findByIdAndDelete(challengeID);
+
+    if (!deletedChallenge) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Challenge not found" });
+    }
+
+    res.json({ success: true, message: "Challenge deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
 
 module.exports = router;
