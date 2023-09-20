@@ -2,12 +2,10 @@ const express = require("express");
 const mongoose = require("mongoose");
 const router = express.Router();
 const SSLCommerzPayment = require("sslcommerz-lts");
-// const store_id = process.env.STORE_ID;
-// const store_passwd = process.env.STORE_PASS;
+const store_id = process.env.STORE_ID;
+const store_passwd = process.env.STORE_PASS;
 const is_live = false;
 const paymentSchema = require("../schemas/paymentSchema");
-const verifyLogin = require("../middlewares/verifyLogin");
-const verifyAdmin = require("../middlewares/verifyAdmin");
 const Payment = mongoose.model("Payment", paymentSchema);
 
 router.get("/", async (req, res) => {
@@ -21,9 +19,10 @@ router.get("/", async (req, res) => {
   }
 });
 
+const newTransactionId = new mongoose.Types.ObjectId().toString();
+
 router.post("/", async (req, res) => {
   const payment = req.body;
-  const newTransactionId = new mongoose.Types.ObjectId().toString();
   const data = {
     total_amount: payment?.amount,
     currency: payment?.currency,
@@ -56,11 +55,7 @@ router.post("/", async (req, res) => {
   };
 
   try {
-    const sslcz = new SSLCommerzPayment(
-      "flexc64e501ed3c650",
-      "flexc64e501ed3c650@ssl",
-      is_live
-    );
+    const sslcz = new SSLCommerzPayment(store_id, store_passwd, is_live);
 
     const apiResponse = await sslcz.init(data);
 
@@ -90,41 +85,40 @@ router.post("/", async (req, res) => {
       .status(500)
       .json({ error: "An error occurred during payment initiation." });
   }
+});
 
-  router.post("/success/:tranId", async (req, res) => {
-    const transactionId = req.params.tranId;
-    const updatedPayment = await Payment.findOneAndUpdate(
-      { transactionId },
-      { $set: { paidStatus: "paid" } },
-      { new: true }
-    );
+router.post("/success/:tranId", async (req, res) => {
+  const transactionId = req.params.tranId;
+  const updatedPayment = await Payment.findOneAndUpdate(
+    { transactionId },
+    { $set: { paidStatus: "paid" } },
+    { new: true }
+  );
 
-    if (!updatedPayment) {
-      return res.status(404).send("Payment not found");
-    }
+  if (!updatedPayment) {
+    return res.status(404).send("Payment not found");
+  }
 
-    updatedPayment.userInfo = req.body.userInfo;
-    await updatedPayment.save();
+  updatedPayment.userInfo = req.body.userInfo;
+  await updatedPayment.save();
 
-    const userEmail = updatedPayment.email;
-    const UsersModel = mongoose.model("User");
-    await UsersModel.updateOne(
-      { email: userEmail },
-      { $set: { isPremium: true } }
-    );
+  const userEmail = updatedPayment.email;
+  const UsersModel = mongoose.model("User");
+  await UsersModel.findOneAndUpdate(
+    { email: userEmail },
+    { $set: { isPremium: true } }
+  );
 
-    res.redirect(`http://localhost:5173/payment/success/${transactionId}`);
+  res.redirect(`http://localhost:5173/payment/success/${transactionId}`);
+});
+
+router.post("/fail/:tranId", async (req, res) => {
+  const unPaidUser = await Payment.deleteOne({
+    transactionId: req.params.tranId,
   });
-
-  router.post("/fail/:tranId", async (req, res) => {
+  if (unPaidUser.deletedCount) {
     res.redirect(`http://localhost:5173/payment/fail/${newTransactionId}`);
-    const unPaidUser = await Payment.deleteOne({
-      transactionId: req.params.tranId,
-    });
-    if (unPaidUser.deletedCount) {
-      res.redirect(`http://localhost:5173/payment/fail/${newTransactionId}`);
-    }
-  });
+  }
 });
 
 router.get("/:tranId", async (req, res) => {
