@@ -10,7 +10,7 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-const dburi = `mongodb+srv://${process.env.FLEXCODE_USERNAME}:${process.env.FLEXCODE_PASSWORD}@cluster0.f5zl9xv.mongodb.net/flexCodeDB?retryWrites=true&w=majority`;
+const dburi = `${process.env.DBURI}`;
 
 const databaseConnect = async () => {
   try {
@@ -48,7 +48,6 @@ const solvedProblems = require("./routeHandler/solvedProblems");
 const problemHandler = require("./routeHandler/problemHandler");
 const exploreHandler = require("./routeHandler/exploreHandler");
 const sendEmail = require("./routeHandler/sendEmailHandler");
-
 
 // application routes
 app.get("/", (req, res) => {
