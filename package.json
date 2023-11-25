@@ -17,5 +17,8 @@
     "jsonwebtoken": "^9.0.1",
     "mongoose": "^7.4.3",
     "sslcommerz-lts": "^1.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
   }
 }

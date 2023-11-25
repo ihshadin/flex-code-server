@@ -58,12 +58,18 @@ router.post("/", async (req, res) => {
     if (existingUser) {
       return res.status(400).json({ message: "user already exists" });
     } else {
-      const newUserInstance = new User(upDateUser);
-      await newUserInstance.save();
-      res.status(200).json({
-        message: "user was inserted successfully",
-        user: newUserInstance,
-      });
+      if (upDateUser.userRole === "general") {
+        const newUserInstance = new User(upDateUser);
+        await newUserInstance.save();
+        res.status(200).json({
+          message: "user was inserted successfully",
+          user: newUserInstance,
+        });
+      } else {
+        return res
+          .status(400)
+          .json({ message: "Only general user can created" });
+      }
     }
   } catch (error) {
     res.status(500).json({ message: "Server Error", error: error.message });
